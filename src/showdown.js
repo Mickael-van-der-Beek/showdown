@@ -826,13 +826,13 @@ Showdown.converter = function(converter_options) {
     return text;
   };
 
-  var writeImageTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7,m8) {
+  var writeImageTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7,m8,m9) {
     var whole_match = m1;
     var alt_text   = m2;
     var link_id      = m3.toLowerCase();
     var url         = m4;
     var title       = m7;
-    var positioningClass = m8;
+    var positioningClass = m9;
 
     if (!title) title = "";
 
@@ -877,12 +877,6 @@ Showdown.converter = function(converter_options) {
     }
 
     result += " />";
-
-    console.log('+++++5+++++');
-    console.log('positioningClass=', positioningClass);
-    console.log('m8=', m8);
-    console.log('result=', result);
-    console.log('+++++5+++++');
 
     return result;
   };
