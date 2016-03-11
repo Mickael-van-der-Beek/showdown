@@ -14,48 +14,14 @@
                 type: 'lang',
                 extract: ['code'],
                 filter: function (text) {
-                    console.log('+++++0+++++');
+                    var imageMarkdownRegex = /^(?:\{(.*?)\})?!(?:\[([^\n\]]*)\])(?:\(([^\n\]]*)\))?$/gim;
 
-                    var imageMarkdownRegex = /^(?:\{(.*?)\})?!(?:\[([^\n\]]*)\])(?:\(([^\n\]]*)\))?(?:\[([^\n\]]*)\])?$/gim;
-
-                    text = text.replace(imageMarkdownRegex, function (match, key, alt, src, positioningClass) {
-                        console.log('+++++1+++++');
-                        console.log('match=', match);
-                        console.log('key=', key);
-                        console.log('alt=', alt);
-                        console.log('src=', src);
-                        console.log('positioningClass=', positioningClass);
-
-                        positioningClass = (
-                            positioningClass &&
-                            positioningClass
-                                .toLowerCase()
-                                .trim()
-                        );
-
-                        var imgTag = '<img';
-
-                        if (!src) {
-                            return '';
+                    text = text.replace(imageMarkdownRegex, function (match, key, alt, src) {
+                        if (src) {
+                            return '<img src="' + src + '" alt="' + alt + '" />';
                         }
 
-                        imgTag += ' src="' + src + '"';
-
-                        if (alt) {
-                            imgTag += ' alt="' + alt + '" title="' + alt + '"';
-                        }
-
-                        if (
-                            positioningClass &&
-                            !!~['left', 'right'].indexOf(positioningClass)
-                        ) {
-                            imgTag += ' class="' + positioningClass + '"';
-                        }
-
-                        console.log('+++++2+++++');
-                        console.log(imgTag + ' />');
-
-                        return imgTag + ' />';
+                        return '';
                     });
 
                     return text;

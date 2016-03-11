@@ -821,17 +821,18 @@ Showdown.converter = function(converter_options) {
        )
        /g,writeImageTag);
        */
-    text = text.replace(/(!\[(.*?)\]\s?\([ \t]*()<?(\S+?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,writeImageTag);
+    text = text.replace(/(!\[(.*?)\]\s?\([ \t]*()<?(\S+?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\)(\[([^\]]+)\])?)/g,writeImageTag);
 
     return text;
   };
 
-  var writeImageTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
+  var writeImageTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7,m8) {
     var whole_match = m1;
     var alt_text   = m2;
     var link_id      = m3.toLowerCase();
     var url         = m4;
     var title       = m7;
+    var positioningClass = m8;
 
     if (!title) title = "";
 
@@ -865,6 +866,15 @@ Showdown.converter = function(converter_options) {
     title = escapeCharacters(title,"*_");
     result +=  " title=\"" + title + "\"";
     //}
+
+    if (
+      positioningClass &&
+      !!~['left', 'right'].indexOf(
+          positioningClass.toLowerCase()
+      )
+    ) {
+      result += " class=\"" + positioningClass + "\"";
+    }
 
     result += " />";
 
