@@ -14,14 +14,36 @@
                 type: 'lang',
                 extract: ['code'],
                 filter: function (text) {
-                    var imageMarkdownRegex = /^(?:\{(.*?)\})?!(?:\[([^\n\]]*)\])(?:\(([^\n\]]*)\))?$/gim;
+                    var imageMarkdownRegex = /^(?:\{(.*?)\})?!(?:\[([^\n\]]*)\])(?:\(([^\n\]]*)\))?(?:\[([^\n\]]*)\])?$/gim;
 
-                    text = text.replace(imageMarkdownRegex, function (match, key, alt, src) {
-                        if (src) {
-                            return '<img src="' + src + '" alt="' + alt + '" />';
+                    text = text.replace(imageMarkdownRegex, function (match, key, alt, src, positioningClass) {
+                        positioningClass = (
+                            positioningClass &&
+                            positioningClass
+                                .toLowerCase()
+                                .trim()
+                        );
+
+                        var imgTag = '<img';
+
+                        if (!src) {
+                            return '';
                         }
 
-                        return '';
+                        imgTag += ' src="' + src + '"';
+
+                        if (alt) {
+                            imgTag += ' alt="' + alt + '" title="' + alt + '"';
+                        }
+
+                        if (
+                            positioningClass &&
+                            !!~['left', 'right'].indexOf(positioningClass)
+                        ) {
+                            imgTag += ' class="' + positioningClass + '"';
+                        }
+
+                        return imgTag + ' />';
                     });
 
                     return text;
