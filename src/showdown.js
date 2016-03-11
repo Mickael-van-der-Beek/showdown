@@ -878,6 +878,12 @@ Showdown.converter = function(converter_options) {
 
     result += " />";
 
+    console.log('+++++5+++++');
+    console.log('positioningClass=', positioningClass);
+    console.log('m8=', m8);
+    console.log('result=', result);
+    console.log('+++++5+++++');
+
     return result;
   };
 
