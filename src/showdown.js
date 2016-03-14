@@ -873,7 +873,7 @@ Showdown.converter = function(converter_options) {
           positioningClass.toLowerCase()
       )
     ) {
-      result += " class=\"" + positioningClass + "\"";
+      result += " class=\"pull-" + positioningClass + "\"";
     }
 
     result += " />";
