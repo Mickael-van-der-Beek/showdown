@@ -855,7 +855,31 @@ Showdown.converter = function(converter_options) {
 
     alt_text = alt_text.replace(/"/g,"&quot;");
     url = escapeCharacters(url,"*_");
-    var result = "<img src=\"" + url + "\" alt=\"" + alt_text + "\"";
+
+    var positioningClass = null;
+    var result = null;
+
+    if (global && global.require) {
+      var prsUrl = require('url').parse(url, true);
+
+      if (
+        prsUrl.query &&
+        prsUrl.query.align &&
+        (
+          prsUrl.query.align.toLowerCase() === 'centre' ||
+          prsUrl.query.align.toLowerCase() === 'right' ||
+          prsUrl.query.align.toLowerCase() === 'left'
+        )
+      ) {
+        positioningClass = 'pull-' + prsUrl.query.align.toLowerCase();
+        delete prsUrl.query.align;
+        url = require('url').format(prsUrl);
+      }
+      result = "<img src=\"" + url + "\" alt=\"" + alt_text + "\"";
+    }
+    else {
+      result = "<img src=\"" + url + "\" alt=\"" + alt_text + "\"";
+    }
 
     // attacklab: Markdown.pl adds empty title attributes to images.
     // Replicate this bug.
@@ -865,6 +889,10 @@ Showdown.converter = function(converter_options) {
     title = escapeCharacters(title,"*_");
     result +=  " title=\"" + title + "\"";
     //}
+
+    if (positioningClass !== null) {
+      result += " class=\"" + positioningClass + "\"";
+    }
 
     result += " />";
 
