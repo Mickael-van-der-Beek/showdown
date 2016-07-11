@@ -754,13 +754,33 @@ Showdown.converter = function(converter_options) {
     }
 
     url = escapeCharacters(url,"*_");
-    var result = "<a href=\"" + url + "\"";
+    var result = "<a";
 
     if (title !== "") {
       title = title.replace(/"/g,"&quot;");
       title = escapeCharacters(title,"*_");
       result +=  " title=\"" + title + "\"";
     }
+
+    if (global && global.require) {
+      var prsUrl = require('url').parse(url, true);
+
+      if (
+        prsUrl.query &&
+        prsUrl.query.nofollow &&
+        (
+          prsUrl.query.nofollow.toLowerCase() === '1' ||
+          prsUrl.query.nofollow.toLowerCase() === 'true'
+        )
+      ) {
+        delete prsUrl.query.nofollow;
+        url = require('url').format(prsUrl);
+
+        result += " rel=\"nofollow\"";
+      }
+    }
+
+    result += " href=\"" + url + "\"";
 
     result += ">" + link_text + "</a>";
 
