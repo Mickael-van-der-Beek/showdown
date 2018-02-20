@@ -140,7 +140,23 @@
 
                     text = text.replace(imageMarkdownRegex, function (match, key, alt, src) {
                         if (src) {
-                            return '<img src="' + src + '" alt="' + alt + '" />';
+                            var positioningClass = null;
+
+                            if (typeof module !== 'undefined') {
+                                var query = require('url').parse(src, true).query;
+                                positioningClass = query.align;
+                            } else if (typeof window !== 'undefined') {
+                                var query = new URLSearchParams(new URL(src).search);
+                                positioningClass = query.get('align');
+                            }
+
+                            var result = '<img src="' + src + '" alt="' + alt + '"';
+
+                            if (positioningClass) {
+                              result += ' class="' + 'pull-' + positioningClass + '"';
+                            }
+
+                            return result += ' />';
                         }
 
                         return '';
