@@ -153,7 +153,7 @@
                             var result = '<img src="' + src + '" alt="' + alt + '"';
 
                             if (positioningClass) {
-                              result += ' class="' + 'pull-' + positioningClass + '"';
+                              result += ' class="' + 'image-' + positioningClass + '"';
                             }
 
                             return result += ' />';
